@@ -15,6 +15,13 @@ type StudentsPageProps = {
     error?: string;
 };
 
+const yearLevels = [
+    { value: '1', label: '1st Year' },
+    { value: '2', label: '2nd Year' },
+    { value: '3', label: '3rd Year' },
+    { value: '4', label: '4th Year' },
+];
+
 export default function StudentsIndex({ students: studentRecords, error }: StudentsPageProps) {
     const registrationForm = useForm({
         student_id: '',
@@ -72,10 +79,10 @@ export default function StudentsIndex({ students: studentRecords, error }: Stude
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[34rem] text-left text-sm">
                                     <thead className="border-b border-gray-200 text-xs uppercase tracking-wide text-gray-500">
-                                        <tr><th className="px-3 py-3">Student ID</th><th className="px-3 py-3">Name</th><th className="px-3 py-3">Course</th><th className="px-3 py-3">Year</th></tr>
+                                        <tr><th className="px-3 py-3">Student ID</th><th className="px-3 py-3">Name</th><th className="px-3 py-3">Course</th><th className="px-3 py-3">Year Level</th></tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-100">
-                                        {studentRecords.map((student) => <tr key={student.id} className="text-gray-700"><td className="px-3 py-4 font-semibold text-[#12355B]">{student.student_id}</td><td className="px-3 py-4">{student.name}</td><td className="px-3 py-4">{student.course}</td><td className="px-3 py-4">{student.year_level}</td></tr>)}
+                                        {studentRecords.map((student) => <tr key={student.id} className="text-gray-700"><td className="px-3 py-4 font-semibold text-[#12355B]">{student.student_id}</td><td className="px-3 py-4">{student.name}</td><td className="px-3 py-4">{student.course}</td><td className="px-3 py-4">{yearLevels.find((year) => Number(year.value) === student.year_level)?.label ?? `${student.year_level}th Year`}</td></tr>)}
                                     </tbody>
                                 </table>
                                 {studentRecords.length === 0 && <p className="py-10 text-center text-sm text-gray-400">No student records found.</p>}
@@ -85,7 +92,8 @@ export default function StudentsIndex({ students: studentRecords, error }: Stude
                         <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                             <h2 className="text-lg font-bold text-[#12355B]">Register student</h2>
                             <form onSubmit={registerStudent} className="mt-5 space-y-4">
-                                {(['student_id', 'name', 'course', 'year_level'] as const).map((field) => <label key={field} className="block text-sm font-medium text-gray-700"><span className="mb-1 block">{field === 'student_id' ? 'Student ID' : field === 'year_level' ? 'Year level' : field.charAt(0).toUpperCase() + field.slice(1)}</span><input required type={field === 'year_level' ? 'number' : 'text'} min={field === 'year_level' ? 1 : undefined} max={field === 'year_level' ? 12 : undefined} value={registrationForm.data[field]} onChange={(event) => registrationForm.setData(field, event.target.value)} className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none ring-[#2F80ED] focus:ring-2" />{registrationForm.errors[field] && <span className="mt-1 block text-xs text-red-600">{registrationForm.errors[field]}</span>}</label>)}
+                                {(['student_id', 'name', 'course'] as const).map((field) => <label key={field} className="block text-sm font-medium text-gray-700"><span className="mb-1 block">{field === 'student_id' ? 'Student ID' : field.charAt(0).toUpperCase() + field.slice(1)}</span><input required type="text" value={registrationForm.data[field]} onChange={(event) => registrationForm.setData(field, event.target.value)} className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none ring-[#2F80ED] focus:ring-2" />{registrationForm.errors[field] && <span className="mt-1 block text-xs text-red-600">{registrationForm.errors[field]}</span>}</label>)}
+                                <label className="block text-sm font-medium text-gray-700"><span className="mb-1 block">Year Level</span><select required value={registrationForm.data.year_level} onChange={(event) => registrationForm.setData('year_level', event.target.value)} className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 outline-none ring-[#2F80ED] focus:ring-2"><option value="">Select year level</option>{yearLevels.map((year) => <option key={year.value} value={year.value}>{year.label}</option>)}</select>{registrationForm.errors.year_level && <span className="mt-1 block text-xs text-red-600">{registrationForm.errors.year_level}</span>}</label>
                                 <button disabled={registrationForm.processing} type="submit" className="w-full rounded-lg bg-[#12355B] px-4 py-3 text-sm font-semibold text-white hover:bg-[#0d2946] disabled:opacity-60">{registrationForm.processing ? 'Saving...' : 'Register student'}</button>
                             </form>
                         </section>

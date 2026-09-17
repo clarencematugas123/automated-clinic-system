@@ -44,7 +44,7 @@ class StudentController extends Controller
             'student_id' => 'required|string|unique:students,student_id',
             'name' => 'required|string|max:255',
             'course' => 'required|string|max:255',
-            'year_level' => 'required|integer|min:1|max:12',
+            'year_level' => 'required|integer|between:1,4',
         ]);
 
         Student::create($validated);
