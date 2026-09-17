@@ -47,7 +47,7 @@ export default function Dashboard({ studentCount = 0 }: DashboardProps) {
     return (
         <>
             <Head title="Dashboard" />
-            <main className="min-h-screen bg-[#dbe8e9] bg-[url('https://images.unsplash.com/photo-1564981797816-1043664bf78d?auto=format&fit=crop&w=2200&q=85')] bg-cover bg-center bg-fixed font-sans text-black">
+            <main className="min-h-screen bg-[#dbe8e9] bg-[url('/campus-background.png')] bg-cover bg-center bg-fixed font-sans text-black">
                 <div className="min-h-screen bg-white/45 p-3 sm:p-5 lg:p-7">
                     <div className="mx-auto grid min-h-[calc(100vh-2rem)] max-w-[1500px] gap-4 lg:grid-cols-[270px_minmax(0,1fr)]">
                         <aside className="overflow-hidden rounded-[28px] border border-white/65 bg-white/60 shadow-[0_20px_55px_rgba(23,57,54,0.18)] backdrop-blur-xl">
