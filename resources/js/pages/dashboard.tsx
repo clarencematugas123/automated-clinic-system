@@ -1,396 +1,108 @@
 import { Head, Link } from '@inertiajs/react';
+import type { ReactNode } from 'react';
+import {
+    Activity,
+    ClipboardList,
+    FlaskConical,
+    GraduationCap,
+    LayoutDashboard,
+    LockKeyhole,
+    Menu,
+    Package,
+    Stethoscope,
+    UserRound,
+    UsersRound,
+} from 'lucide-react';
 import { dashboard } from '@/routes';
 
-export default function Dashboard({ studentCount = 0 }: { studentCount?: number }) {
+type DashboardProps = { studentCount?: number };
+
+const navItems = [
+    { label: 'Student Records', icon: GraduationCap, href: '/students', active: true },
+    { label: 'Queue Management', icon: Activity, href: '#' },
+    { label: 'Consultation', icon: Stethoscope, href: '#' },
+    { label: 'Lab Results', icon: FlaskConical, href: '#' },
+    { label: 'Clearance', icon: ClipboardList, href: '#' },
+    { label: 'Reports', icon: LayoutDashboard, href: '#' },
+    { label: 'Inventory', icon: Package, href: '#' },
+    { label: 'Security', icon: LockKeyhole, href: '#' },
+];
+
+const activities = [
+    { label: 'Medical', status: 'Completed', date: 'September 5, 2026', tone: 'success' },
+    { label: 'Dental', status: 'Completed', date: 'September 5, 2026', tone: 'success' },
+    { label: 'Medical', status: 'Waiting', date: 'September 4, 2026', tone: 'warning' },
+    { label: 'Laboratory', status: 'Completed', date: 'September 4, 2026', tone: 'success' },
+];
+
+export default function Dashboard({ studentCount = 0 }: DashboardProps) {
+    const stats = [
+        { label: 'Students', value: studentCount, detail: 'Records', icon: GraduationCap },
+        { label: 'Queue', value: '08', detail: 'Waiting', icon: Activity },
+        { label: 'Consult', value: '12', detail: 'Today', icon: Stethoscope },
+        { label: 'Lab', value: '05', detail: 'Pending', icon: FlaskConical },
+        { label: 'Clearance', value: '07', detail: 'Pending', icon: ClipboardList },
+    ];
+
     return (
         <>
             <Head title="Dashboard" />
-
-            <div className="min-h-screen bg-[#F5F7FA]">
-
-                {/* HEADER */}
-                <div className="bg-[#12355B] px-6 py-5 text-white">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-xl font-bold tracking-wide">
-                                BROKENSHIRE AUTOMATED CLINIC SERVICES
-                            </h1>
-
-                            <p className="mt-1 text-sm text-blue-100">
-                                Automated Campus Clinic Records System
-                            </p>
-                        </div>
-
-                        <div className="rounded-lg bg-white/10 px-4 py-2 text-sm">
-                            👤 ADMIN / CLINIC STAFF
-                        </div>
-                    </div>
-                </div>
-
-
-                {/* CONTENT */}
-                <div className="p-6 lg:p-8">
-
-                    {/* TITLE */}
-                    <div className="mb-7">
-                        <h2 className="text-3xl font-bold text-[#12355B]">
-                            DASHBOARD
-                        </h2>
-
-                        <p className="mt-1 text-gray-500">
-                            Welcome back, Clinic Staff!
-                        </p>
-                    </div>
-
-
-                    {/* SUMMARY CARDS */}
-                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
-
-                        {/* STUDENTS */}
-                        <div className="rounded-xl border border-gray-200 border-l-4 border-l-[#2F80ED] bg-white p-5 shadow-sm">
-                            <div className="flex items-center justify-between">
-                                <p className="text-xs font-bold text-gray-500">
-                                    STUDENTS
-                                </p>
-
-                                <span className="text-2xl">👨‍🎓</span>
+            <main className="min-h-screen bg-[#dbe8e9] bg-[url('https://images.unsplash.com/photo-1564981797816-1043664bf78d?auto=format&fit=crop&w=2200&q=85')] bg-cover bg-center bg-fixed font-sans text-black">
+                <div className="min-h-screen bg-white/45 p-3 sm:p-5 lg:p-7">
+                    <div className="mx-auto grid min-h-[calc(100vh-2rem)] max-w-[1500px] gap-4 lg:grid-cols-[270px_minmax(0,1fr)]">
+                        <aside className="overflow-hidden rounded-[28px] border border-white/65 bg-white/60 shadow-[0_20px_55px_rgba(23,57,54,0.18)] backdrop-blur-xl">
+                            <div className="flex items-center gap-3 px-5 py-6 sm:px-7 lg:block lg:px-7">
+                                <img src="/brokenshire-logo.png" alt="Brokenshire Clinic" className="h-11 w-11 shrink-0 object-contain" />
+                                <p className="max-w-[190px] text-center text-xs font-extrabold uppercase leading-tight tracking-wide lg:mt-3">Brokenshire Automated<br />Clinic Services</p>
+                                <button type="button" className="ml-auto rounded-full p-2 lg:hidden" aria-label="Open menu"><Menu className="h-5 w-5" /></button>
                             </div>
+                            <div className="hidden border-y border-white/70 bg-gradient-to-r from-[#119b78] to-[#0c654e] px-7 py-4 text-sm font-extrabold uppercase text-white lg:block">Quick Access</div>
+                            <nav className="grid grid-cols-2 gap-1 p-3 sm:grid-cols-4 lg:block lg:p-4">
+                                {navItems.map(({ label, icon: Icon, href, active }) => (
+                                    <Link key={label} href={href} className={`flex min-h-12 items-center gap-3 rounded-xl px-3 py-3 text-xs font-extrabold uppercase transition sm:px-4 lg:rounded-none lg:px-3 ${active ? 'bg-white/50 text-[#075c49] lg:bg-transparent' : 'text-black/80 hover:bg-white/45'}`}>
+                                        <Icon className="h-4 w-4 shrink-0" strokeWidth={2.5} />
+                                        <span>{label}</span>
+                                    </Link>
+                                ))}
+                            </nav>
+                        </aside>
 
-                            <p className="mt-3 text-3xl font-bold text-[#12355B]">
-                                {studentCount}
-                            </p>
-
-                            <p className="mt-1 text-sm text-gray-400">
-                                Records
-                            </p>
-                        </div>
-
-
-                        {/* QUEUE */}
-                        <div className="rounded-xl border border-gray-200 border-l-4 border-l-[#F2C94C] bg-white p-5 shadow-sm">
-                            <div className="flex items-center justify-between">
-                                <p className="text-xs font-bold text-gray-500">
-                                    QUEUE
-                                </p>
-
-                                <span className="text-2xl">🏥</span>
-                            </div>
-
-                            <p className="mt-3 text-3xl font-bold text-[#12355B]">
-                                08
-                            </p>
-
-                            <p className="mt-1 text-sm text-gray-400">
-                                Waiting
-                            </p>
-                        </div>
-
-
-                        {/* CONSULTATION */}
-                        <div className="rounded-xl border border-gray-200 border-l-4 border-l-[#27AE60] bg-white p-5 shadow-sm">
-                            <div className="flex items-center justify-between">
-                                <p className="text-xs font-bold text-gray-500">
-                                    CONSULT
-                                </p>
-
-                                <span className="text-2xl">👨‍⚕️</span>
-                            </div>
-
-                            <p className="mt-3 text-3xl font-bold text-[#12355B]">
-                                12
-                            </p>
-
-                            <p className="mt-1 text-sm text-gray-400">
-                                Today
-                            </p>
-                        </div>
-
-
-                        {/* LAB */}
-                        <div className="rounded-xl border border-gray-200 border-l-4 border-l-[#2F80ED] bg-white p-5 shadow-sm">
-                            <div className="flex items-center justify-between">
-                                <p className="text-xs font-bold text-gray-500">
-                                    LAB
-                                </p>
-
-                                <span className="text-2xl">🧪</span>
-                            </div>
-
-                            <p className="mt-3 text-3xl font-bold text-[#12355B]">
-                                05
-                            </p>
-
-                            <p className="mt-1 text-sm text-gray-400">
-                                Pending
-                            </p>
-                        </div>
-
-
-                        {/* CLEARANCE */}
-                        <div className="rounded-xl border border-gray-200 border-l-4 border-l-[#EB5757] bg-white p-5 shadow-sm">
-                            <div className="flex items-center justify-between">
-                                <p className="text-xs font-bold text-gray-500">
-                                    CLEARANCE
-                                </p>
-
-                                <span className="text-2xl">📋</span>
-                            </div>
-
-                            <p className="mt-3 text-3xl font-bold text-[#12355B]">
-                                07
-                            </p>
-
-                            <p className="mt-1 text-sm text-gray-400">
-                                Pending
-                            </p>
-                        </div>
-
-                    </div>
-
-
-                    {/* LOWER SECTION */}
-                    <div className="mt-8 grid gap-6 lg:grid-cols-3">
-
-                        {/* QUICK ACCESS */}
-                        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm lg:col-span-1">
-
-                            <h3 className="text-lg font-bold text-[#12355B]">
-                                Quick Access
-                            </h3>
-
-                            <p className="mb-5 mt-1 text-sm text-gray-400">
-                                Clinic system modules
-                            </p>
-
-
-                            <div className="space-y-2">
-
-                                <Link
-                                    href="/students"
-                                    className="flex items-center gap-3 rounded-lg bg-[#EAF4FF] px-4 py-3 text-sm font-semibold text-[#2F80ED] transition hover:bg-blue-100"
-                                >
-                                    <span>👨‍🎓</span>
-                                    Student Records
-                                </Link>
-
-
-                                <a
-                                    href="#"
-                                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-gray-600 transition hover:bg-[#EAF4FF] hover:text-[#2F80ED]"
-                                >
-                                    <span>🏥</span>
-                                    Queue Management
-                                </a>
-
-
-                                <a
-                                    href="#"
-                                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-gray-600 transition hover:bg-[#EAF4FF] hover:text-[#2F80ED]"
-                                >
-                                    <span>👨‍⚕️</span>
-                                    Consultation
-                                </a>
-
-
-                                <a
-                                    href="#"
-                                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-gray-600 transition hover:bg-[#EAF4FF] hover:text-[#2F80ED]"
-                                >
-                                    <span>🧪</span>
-                                    Laboratory Results
-                                </a>
-
-
-                                <a
-                                    href="#"
-                                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-gray-600 transition hover:bg-[#EAF4FF] hover:text-[#2F80ED]"
-                                >
-                                    <span>📋</span>
-                                    Clearance
-                                </a>
-
-
-                                <a
-                                    href="#"
-                                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-gray-600 transition hover:bg-[#EAF4FF] hover:text-[#2F80ED]"
-                                >
-                                    <span>📊</span>
-                                    Reports
-                                </a>
-
-
-                                <a
-                                    href="#"
-                                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-gray-600 transition hover:bg-[#EAF4FF] hover:text-[#2F80ED]"
-                                >
-                                    <span>📦</span>
-                                    Inventory
-                                </a>
-
-
-                                <a
-                                    href="#"
-                                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-gray-600 transition hover:bg-[#EAF4FF] hover:text-[#2F80ED]"
-                                >
-                                    <span>🔐</span>
-                                    Security
-                                </a>
-
-                            </div>
-                        </div>
-
-
-                        {/* RECENT ACTIVITY */}
-                        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm lg:col-span-2">
-
-                            <div className="mb-5 flex items-center justify-between">
-
+                        <section className="relative overflow-hidden rounded-[28px] border border-white/70 bg-white/55 shadow-[0_20px_55px_rgba(23,57,54,0.16)] backdrop-blur-xl">
+                            <header className="flex items-center justify-between gap-4 px-6 py-6 sm:px-10 sm:py-7">
                                 <div>
-                                    <h3 className="text-lg font-bold text-[#12355B]">
-                                        Recent Clinic Activity
-                                    </h3>
+                                    <h1 className="text-2xl font-black uppercase tracking-tight sm:text-3xl">Dashboard</h1>
+                                    <p className="mt-8 text-base font-bold uppercase sm:text-lg">Welcome back, clinic staff!</p>
+                                </div>
+                                <div className="flex items-center gap-3 text-sm font-extrabold uppercase sm:text-base"><span className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-black bg-white/55"><UserRound className="h-6 w-6" /></span>Admin</div>
+                            </header>
 
-                                    <p className="mt-1 text-sm text-gray-400">
-                                        Latest activities in the clinic
-                                    </p>
+                            <div className="px-6 pb-7 sm:px-10">
+                                <div className="grid grid-cols-2 gap-x-5 gap-y-6 border-b border-black/15 pb-7 sm:grid-cols-5 sm:gap-4">
+                                    {stats.map(({ label, value, detail, icon: Icon }) => (
+                                        <div key={label} className="min-w-0">
+                                            <div className="flex items-center gap-2"><Icon className="h-5 w-5" strokeWidth={2.5} /><p className="truncate text-sm font-black uppercase sm:text-base">{label}</p></div>
+                                            <p className="mt-2 text-4xl font-black tracking-tight sm:text-5xl">{value}</p>
+                                            <p className="mt-1 text-xs font-bold uppercase sm:text-sm">{detail}</p>
+                                        </div>
+                                    ))}
                                 </div>
 
-                                <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-                                    ● LIVE
-                                </span>
-
+                                <div className="mt-7 grid gap-8 xl:grid-cols-[minmax(0,1fr)_330px]">
+                                    <div>
+                                        <div className="mb-4 flex items-center justify-between"><h2 className="text-xl font-black uppercase sm:text-2xl">Recent Clinic Activity</h2><span className="flex items-center gap-2 text-xs font-black uppercase"><span className="h-2 w-2 rounded-full bg-[#0b996e]" />Live</span></div>
+                                        <div className="divide-y divide-black/15">
+                                            {activities.map((activity) => <div key={`${activity.label}-${activity.status}`} className="flex items-center justify-between gap-4 py-4"><div className="flex items-center gap-4"><div className={`flex h-9 w-9 items-center justify-center rounded-full ${activity.tone === 'success' ? 'bg-[#b9e9d7]' : 'bg-[#f8e4a8]'}`}><UsersRound className="h-4 w-4" /></div><div><p className="text-sm font-bold uppercase">{activity.label}</p><p className="text-xs font-medium uppercase text-black/60">{activity.date}</p></div></div><span className={`text-xs font-black uppercase ${activity.tone === 'success' ? 'text-[#087653]' : 'text-[#a26b00]'}`}>{activity.status}</span></div>)}
+                                        </div>
+                                    </div>
+                                    <div className="border-t border-black/15 pt-5 xl:border-l xl:border-t-0 xl:pl-7"><p className="text-xs font-black uppercase tracking-widest text-black/60">System status</p><div className="mt-4 flex items-center gap-3"><span className="h-3 w-3 rounded-full bg-[#0b996e] shadow-[0_0_0_5px_rgba(11,153,110,0.15)]" /><p className="text-lg font-black uppercase">Clinic online</p></div><p className="mt-3 text-sm font-medium leading-relaxed text-black/65">All core services are operating normally.</p></div>
+                                </div>
                             </div>
-
-
-                            <div className="space-y-1">
-
-                                {/* ACTIVITY 1 */}
-                                <div className="flex items-center justify-between border-b border-gray-100 py-4">
-
-                                    <div className="flex items-center gap-4">
-
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100">
-                                            ✓
-                                        </div>
-
-                                        <div>
-                                            <p className="text-sm font-semibold text-gray-700">
-                                                Medical Completed
-                                            </p>
-
-                                            <p className="text-xs text-gray-400">
-                                                September 5, 2026
-                                            </p>
-                                        </div>
-
-                                    </div>
-
-                                    <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-                                        COMPLETED
-                                    </span>
-
-                                </div>
-
-
-                                {/* ACTIVITY 2 */}
-                                <div className="flex items-center justify-between border-b border-gray-100 py-4">
-
-                                    <div className="flex items-center gap-4">
-
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100">
-                                            ✓
-                                        </div>
-
-                                        <div>
-                                            <p className="text-sm font-semibold text-gray-700">
-                                                Dental Completed
-                                            </p>
-
-                                            <p className="text-xs text-gray-400">
-                                                September 5, 2026
-                                            </p>
-                                        </div>
-
-                                    </div>
-
-                                    <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-                                        COMPLETED
-                                    </span>
-
-                                </div>
-
-
-                                {/* ACTIVITY 3 */}
-                                <div className="flex items-center justify-between border-b border-gray-100 py-4">
-
-                                    <div className="flex items-center gap-4">
-
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-100">
-                                            ⏱
-                                        </div>
-
-                                        <div>
-                                            <p className="text-sm font-semibold text-gray-700">
-                                                Medical Waiting
-                                            </p>
-
-                                            <p className="text-xs text-gray-400">
-                                                September 4, 2026
-                                            </p>
-                                        </div>
-
-                                    </div>
-
-                                    <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-700">
-                                        WAITING
-                                    </span>
-
-                                </div>
-
-
-                                {/* ACTIVITY 4 */}
-                                <div className="flex items-center justify-between py-4">
-
-                                    <div className="flex items-center gap-4">
-
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
-                                            🧪
-                                        </div>
-
-                                        <div>
-                                            <p className="text-sm font-semibold text-gray-700">
-                                                Laboratory Completed
-                                            </p>
-
-                                            <p className="text-xs text-gray-400">
-                                                September 4, 2026
-                                            </p>
-                                        </div>
-
-                                    </div>
-
-                                    <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-                                        COMPLETED
-                                    </span>
-
-                                </div>
-
-                            </div>
-                        </div>
-
+                        </section>
                     </div>
-
                 </div>
-            </div>
+            </main>
         </>
     );
 }
 
-Dashboard.layout = {
-    breadcrumbs: [
-        {
-            title: 'Dashboard',
-            href: dashboard(),
-        },
-    ],
-};
+Dashboard.layout = (page: ReactNode) => page;
