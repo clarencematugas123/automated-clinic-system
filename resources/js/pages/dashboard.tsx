@@ -15,12 +15,12 @@ import {
 } from 'lucide-react';
 import { dashboard } from '@/routes';
 
-type DashboardProps = { studentCount?: number };
+type DashboardProps = { studentCount?: number; queueCount?: number; consultationCount?: number };
 
 const navItems = [
     { label: 'Student Records', icon: GraduationCap, href: '/students', active: true },
-    { label: 'Queue Management', icon: Activity, href: '#' },
-    { label: 'Consultation', icon: Stethoscope, href: '#' },
+    { label: 'Queue Management', icon: Activity, href: '/queue' },
+    { label: 'Consultation', icon: Stethoscope, href: '/consultations' },
     { label: 'Lab Results', icon: FlaskConical, href: '#' },
     { label: 'Clearance', icon: ClipboardList, href: '#' },
     { label: 'Reports', icon: LayoutDashboard, href: '#' },
@@ -35,11 +35,11 @@ const activities = [
     { label: 'Laboratory', status: 'Completed', date: 'September 4, 2026', tone: 'success' },
 ];
 
-export default function Dashboard({ studentCount = 0 }: DashboardProps) {
+export default function Dashboard({ studentCount = 0, queueCount = 0, consultationCount = 0 }: DashboardProps) {
     const stats = [
         { label: 'Students', value: studentCount, detail: 'Records', icon: GraduationCap },
-        { label: 'Queue', value: '08', detail: 'Waiting', icon: Activity },
-        { label: 'Consult', value: '12', detail: 'Today', icon: Stethoscope },
+        { label: 'Queue', value: queueCount, detail: 'Waiting', icon: Activity },
+        { label: 'Consult', value: consultationCount, detail: 'Today', icon: Stethoscope },
         { label: 'Lab', value: '05', detail: 'Pending', icon: FlaskConical },
         { label: 'Clearance', value: '07', detail: 'Pending', icon: ClipboardList },
     ];
