@@ -15,7 +15,8 @@ import {
 } from 'lucide-react';
 import { dashboard } from '@/routes';
 
-type DashboardProps = { studentCount?: number; queueCount?: number; consultationCount?: number; labPendingCount?: number; clearancePendingCount?: number; inventoryLowCount?: number };
+type ActivityItem = { label: string; status: string; date: string };
+type DashboardProps = { studentCount?: number; queueCount?: number; consultationCount?: number; labPendingCount?: number; clearancePendingCount?: number; inventoryLowCount?: number; recentActivities?: ActivityItem[] };
 
 const navItems = [
     { label: 'Student Records', icon: GraduationCap, href: '/students', active: true },
@@ -28,14 +29,7 @@ const navItems = [
     { label: 'Security', icon: LockKeyhole, href: '/security' },
 ];
 
-const activities = [
-    { label: 'Medical', status: 'Completed', date: 'September 5, 2026', tone: 'success' },
-    { label: 'Dental', status: 'Completed', date: 'September 5, 2026', tone: 'success' },
-    { label: 'Medical', status: 'Waiting', date: 'September 4, 2026', tone: 'warning' },
-    { label: 'Laboratory', status: 'Completed', date: 'September 4, 2026', tone: 'success' },
-];
-
-export default function Dashboard({ studentCount = 0, queueCount = 0, consultationCount = 0, labPendingCount = 0, clearancePendingCount = 0, inventoryLowCount = 0 }: DashboardProps) {
+export default function Dashboard({ studentCount = 0, queueCount = 0, consultationCount = 0, labPendingCount = 0, clearancePendingCount = 0, inventoryLowCount = 0, recentActivities = [] }: DashboardProps) {
     const stats = [
         { label: 'Students', value: studentCount, detail: 'Records', icon: GraduationCap },
         { label: 'Queue', value: queueCount, detail: 'Waiting', icon: Activity },
@@ -91,7 +85,8 @@ export default function Dashboard({ studentCount = 0, queueCount = 0, consultati
                                     <div>
                                         <div className="mb-4 flex items-center justify-between"><h2 className="text-xl font-black uppercase sm:text-2xl">Recent Clinic Activity</h2><span className="flex items-center gap-2 text-xs font-black uppercase"><span className="h-2 w-2 rounded-full bg-[#0b996e]" />Live</span></div>
                                         <div className="divide-y divide-black/15">
-                                            {activities.map((activity) => <div key={`${activity.label}-${activity.status}`} className="flex items-center justify-between gap-4 py-4"><div className="flex items-center gap-4"><div className={`flex h-9 w-9 items-center justify-center rounded-full ${activity.tone === 'success' ? 'bg-[#b9e9d7]' : 'bg-[#f8e4a8]'}`}><UsersRound className="h-4 w-4" /></div><div><p className="text-sm font-bold uppercase">{activity.label}</p><p className="text-xs font-medium uppercase text-black/60">{activity.date}</p></div></div><span className={`text-xs font-black uppercase ${activity.tone === 'success' ? 'text-[#087653]' : 'text-[#a26b00]'}`}>{activity.status}</span></div>)}
+                                            {recentActivities.map((activity, index) => { const isCompleted = activity.status === 'completed' || activity.status === 'approved'; return <div key={`${activity.label}-${activity.date}-${index}`} className="flex items-center justify-between gap-4 py-4"><div className="flex items-center gap-4"><div className={`flex h-9 w-9 items-center justify-center rounded-full ${isCompleted ? 'bg-[#b9e9d7]' : 'bg-[#f8e4a8]'}`}><UsersRound className="h-4 w-4" /></div><div><p className="text-sm font-bold uppercase">{activity.label}</p><p className="text-xs font-medium uppercase text-black/60">{activity.date}</p></div></div><span className={`text-xs font-black uppercase ${isCompleted ? 'text-[#087653]' : 'text-[#a26b00]'}`}>{activity.status}</span></div>; })}
+                                            {recentActivities.length === 0 && <p className="py-10 text-sm font-black uppercase text-black/45">No service activity yet</p>}
                                         </div>
                                     </div>
                                     <div className="border-t border-black/15 pt-5 xl:border-l xl:border-t-0 xl:pl-7"><p className="text-xs font-black uppercase tracking-widest text-black/60">System status</p><div className="mt-4 flex items-center gap-3"><span className="h-3 w-3 rounded-full bg-[#0b996e] shadow-[0_0_0_5px_rgba(11,153,110,0.15)]" /><p className="text-lg font-black uppercase">Clinic online</p></div><p className="mt-3 text-sm font-medium leading-relaxed text-black/65">All core services are operating normally.</p></div>

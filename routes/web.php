@@ -16,6 +16,29 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
+        $recentActivities = collect([
+            ...\App\Models\QueueEntry::with('student:id,name')->latest()->take(3)->get()->map(fn ($entry) => [
+                'label' => "Queue · {$entry->service}",
+                'status' => str_replace('_', ' ', $entry->status),
+                'date' => $entry->created_at->format('M j, Y'),
+            ]),
+            ...\App\Models\Consultation::with('student:id,name')->latest()->take(3)->get()->map(fn ($consultation) => [
+                'label' => "Consultation · {$consultation->service}",
+                'status' => str_replace('_', ' ', $consultation->status),
+                'date' => $consultation->created_at->format('M j, Y'),
+            ]),
+            ...\App\Models\LabResult::with('student:id,name')->latest()->take(2)->get()->map(fn ($result) => [
+                'label' => "Laboratory · {$result->test_name}",
+                'status' => $result->status,
+                'date' => $result->created_at->format('M j, Y'),
+            ]),
+            ...\App\Models\Clearance::with('student:id,name')->latest()->take(2)->get()->map(fn ($clearance) => [
+                'label' => "Clearance · {$clearance->clearance_type}",
+                'status' => $clearance->status,
+                'date' => $clearance->created_at->format('M j, Y'),
+            ]),
+        ])->take(6)->values();
+
         return inertia('dashboard', [
             'studentCount' => Student::count(),
             'queueCount' => \App\Models\QueueEntry::where('status', 'waiting')->count(),
@@ -23,6 +46,7 @@ Route::middleware('auth')->group(function () {
             'labPendingCount' => \App\Models\LabResult::where('status', 'pending')->count(),
             'clearancePendingCount' => \App\Models\Clearance::where('status', 'pending')->count(),
             'inventoryLowCount' => \App\Models\InventoryItem::whereColumn('quantity', '<=', 'reorder_level')->count(),
+            'recentActivities' => $recentActivities,
         ]);
     })->name('dashboard');
 
