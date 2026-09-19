@@ -1,0 +1,31 @@
+import { Head, Link, router, useForm } from '@inertiajs/react';
+import { ArrowLeft, CheckCircle2, ClipboardCheck, XCircle } from 'lucide-react';
+import type { FormEvent, ReactNode } from 'react';
+
+type Student = { id: number; student_id: string; name: string };
+type Clearance = { id: number; clearance_type: string; remarks: string | null; status: string; student: Student };
+type Props = { students: Student[]; clearances: Clearance[]; success?: string };
+
+export default function ClearanceIndex({ students, clearances, success }: Props) {
+    const form = useForm({ student_id: '', clearance_type: 'Medical', remarks: '' });
+
+    function submit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        form.post('/clearance', { onSuccess: () => form.reset() });
+    }
+
+    function updateStatus(id: number, status: string) {
+        router.patch(`/clearance/${id}/status`, { status }, { preserveScroll: true });
+    }
+
+    return (
+        <><Head title="Clearance" /><main className="min-h-screen bg-[#dbe8e9] bg-[url('/campus-background.png')] bg-cover bg-center bg-fixed font-sans text-black"><div className="min-h-screen bg-white/45 p-3 sm:p-5 lg:p-7"><div className="mx-auto min-h-[calc(100vh-2rem)] max-w-[1500px]">
+            <header className="mb-4 flex items-center justify-between rounded-[28px] border border-white/70 bg-white/60 px-5 py-4 shadow-[0_20px_55px_rgba(23,57,54,0.16)] backdrop-blur-xl sm:px-8"><div className="flex items-center gap-3"><img src="/brokenshire-logo.png" alt="Brokenshire Clinic" className="h-11 w-11 object-contain" /><div><p className="text-xs font-black uppercase tracking-widest text-[#075c49]">Clinic operations</p><h1 className="text-xl font-black uppercase sm:text-2xl">Clearance</h1></div></div><Link href="/dashboard" className="flex items-center gap-2 text-xs font-black uppercase text-[#075c49] hover:text-[#0b996e]"><ArrowLeft className="h-4 w-4" /><span className="hidden sm:inline">Dashboard</span></Link></header>
+            {success && <div className="mb-4 rounded-2xl border border-[#8ad8bd] bg-[#e0f7ed]/90 px-5 py-3 text-sm font-bold text-[#075c49]">{success}</div>}
+            <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_350px]"><section className="rounded-[28px] border border-white/70 bg-white/60 p-5 shadow-[0_20px_55px_rgba(23,57,54,0.16)] backdrop-blur-xl sm:p-8"><div className="mb-6 flex items-center justify-between"><div className="flex items-center gap-2"><ClipboardCheck className="h-5 w-5 text-[#075c49]" /><h2 className="text-xl font-black uppercase sm:text-2xl">Clearance Requests</h2></div><span className="rounded-full bg-[#f8e4a8] px-3 py-1 text-xs font-black uppercase text-[#8a5b00]">{clearances.filter((item) => item.status === 'pending').length} pending</span></div><div className="space-y-3">{clearances.map((clearance) => <article key={clearance.id} className="flex flex-col gap-4 rounded-2xl border border-black/10 bg-white/45 p-4 sm:flex-row sm:items-center sm:justify-between"><div><p className="font-black uppercase">{clearance.student.name}</p><p className="text-xs font-bold uppercase text-black/55">{clearance.student.student_id} · {clearance.clearance_type} Clearance</p>{clearance.remarks && <p className="mt-2 text-sm font-medium">{clearance.remarks}</p>}</div><div className="flex items-center gap-2"><span className={`rounded-full px-3 py-1 text-xs font-black uppercase ${clearance.status === 'pending' ? 'bg-[#f8e4a8] text-[#8a5b00]' : clearance.status === 'approved' ? 'bg-[#b9e9d7] text-[#075c49]' : 'bg-red-100 text-red-700'}`}>{clearance.status}</span>{clearance.status === 'pending' && <><button type="button" onClick={() => updateStatus(clearance.id, 'approved')} className="rounded-lg bg-[#075c49] p-2 text-white" title="Approve clearance"><CheckCircle2 className="h-4 w-4" /></button><button type="button" onClick={() => updateStatus(clearance.id, 'rejected')} className="rounded-lg bg-red-600 p-2 text-white" title="Reject clearance"><XCircle className="h-4 w-4" /></button></>}</div></article>)}{clearances.length === 0 && <p className="py-16 text-center text-sm font-black uppercase text-black/45">No clearance requests recorded</p>}</div></section>
+            <section className="rounded-[28px] border border-white/70 bg-white/60 p-5 shadow-[0_20px_55px_rgba(23,57,54,0.16)] backdrop-blur-xl sm:p-7"><h2 className="text-xl font-black uppercase">New Clearance</h2><p className="mt-1 text-xs font-bold uppercase tracking-wide text-black/55">Create a student clearance request</p><form onSubmit={submit} className="mt-6 space-y-4"><label className="block text-xs font-black uppercase tracking-wide text-black/65">Student<select required value={form.data.student_id} onChange={(event) => form.setData('student_id', event.target.value)} className="mt-1 w-full rounded-xl border border-black/20 bg-white/55 px-3 py-3 text-sm normal-case outline-none ring-[#0b996e] focus:ring-2"><option value="">Select student</option>{students.map((student) => <option key={student.id} value={student.id}>{student.student_id} - {student.name}</option>)}</select></label><label className="block text-xs font-black uppercase tracking-wide text-black/65">Clearance Type<select required value={form.data.clearance_type} onChange={(event) => form.setData('clearance_type', event.target.value)} className="mt-1 w-full rounded-xl border border-black/20 bg-white/55 px-3 py-3 text-sm normal-case outline-none ring-[#0b996e] focus:ring-2"><option>Medical</option><option>Dental</option><option>General</option></select></label><label className="block text-xs font-black uppercase tracking-wide text-black/65">Remarks<textarea value={form.data.remarks} onChange={(event) => form.setData('remarks', event.target.value)} rows={3} className="mt-1 w-full rounded-xl border border-black/20 bg-white/55 px-3 py-2.5 text-sm normal-case outline-none ring-[#0b996e] focus:ring-2" /></label><button disabled={form.processing} type="submit" className="w-full rounded-xl bg-[#075c49] px-4 py-3 text-xs font-black uppercase text-white hover:bg-[#0b996e] disabled:opacity-60">{form.processing ? 'Saving...' : 'Create Clearance'}</button></form></section></div>
+        </div></div></main></>
+    );
+}
+
+ClearanceIndex.layout = (page: ReactNode) => page;

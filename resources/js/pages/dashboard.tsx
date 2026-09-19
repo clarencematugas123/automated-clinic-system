@@ -15,15 +15,15 @@ import {
 } from 'lucide-react';
 import { dashboard } from '@/routes';
 
-type DashboardProps = { studentCount?: number; queueCount?: number; consultationCount?: number };
+type DashboardProps = { studentCount?: number; queueCount?: number; consultationCount?: number; labPendingCount?: number; clearancePendingCount?: number };
 
 const navItems = [
     { label: 'Student Records', icon: GraduationCap, href: '/students', active: true },
     { label: 'Queue Management', icon: Activity, href: '/queue' },
     { label: 'Consultation', icon: Stethoscope, href: '/consultations' },
-    { label: 'Lab Results', icon: FlaskConical, href: '#' },
-    { label: 'Clearance', icon: ClipboardList, href: '#' },
-    { label: 'Reports', icon: LayoutDashboard, href: '#' },
+    { label: 'Lab Results', icon: FlaskConical, href: '/lab-results' },
+    { label: 'Clearance', icon: ClipboardList, href: '/clearance' },
+    { label: 'Reports', icon: LayoutDashboard, href: '/reports' },
     { label: 'Inventory', icon: Package, href: '#' },
     { label: 'Security', icon: LockKeyhole, href: '#' },
 ];
@@ -35,13 +35,13 @@ const activities = [
     { label: 'Laboratory', status: 'Completed', date: 'September 4, 2026', tone: 'success' },
 ];
 
-export default function Dashboard({ studentCount = 0, queueCount = 0, consultationCount = 0 }: DashboardProps) {
+export default function Dashboard({ studentCount = 0, queueCount = 0, consultationCount = 0, labPendingCount = 0, clearancePendingCount = 0 }: DashboardProps) {
     const stats = [
         { label: 'Students', value: studentCount, detail: 'Records', icon: GraduationCap },
         { label: 'Queue', value: queueCount, detail: 'Waiting', icon: Activity },
         { label: 'Consult', value: consultationCount, detail: 'Today', icon: Stethoscope },
-        { label: 'Lab', value: '05', detail: 'Pending', icon: FlaskConical },
-        { label: 'Clearance', value: '07', detail: 'Pending', icon: ClipboardList },
+        { label: 'Lab', value: labPendingCount, detail: 'Pending', icon: FlaskConical },
+        { label: 'Clearance', value: clearancePendingCount, detail: 'Pending', icon: ClipboardList },
     ];
 
     return (

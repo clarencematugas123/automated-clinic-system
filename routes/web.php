@@ -5,6 +5,9 @@ use App\Models\Student;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\QueueController;
 use App\Http\Controllers\ConsultationController;
+use App\Http\Controllers\LabResultController;
+use App\Http\Controllers\ClearanceController;
+use App\Http\Controllers\ReportController;
 
 Route::get('/', function () {
     return inertia('welcome');
@@ -16,6 +19,8 @@ Route::middleware('auth')->group(function () {
             'studentCount' => Student::count(),
             'queueCount' => \App\Models\QueueEntry::where('status', 'waiting')->count(),
             'consultationCount' => \App\Models\Consultation::whereDate('created_at', today())->count(),
+            'labPendingCount' => \App\Models\LabResult::where('status', 'pending')->count(),
+            'clearancePendingCount' => \App\Models\Clearance::where('status', 'pending')->count(),
         ]);
     })->name('dashboard');
 
@@ -35,6 +40,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/consultations', [ConsultationController::class, 'index'])->name('consultations.index');
     Route::post('/consultations', [ConsultationController::class, 'store'])->name('consultations.store');
     Route::patch('/consultations/{consultation}/status', [ConsultationController::class, 'updateStatus'])->name('consultations.status');
+
+    Route::get('/lab-results', [LabResultController::class, 'index'])->name('lab-results.index');
+    Route::post('/lab-results', [LabResultController::class, 'store'])->name('lab-results.store');
+    Route::patch('/lab-results/{labResult}/status', [LabResultController::class, 'updateStatus'])->name('lab-results.status');
+
+    Route::get('/clearance', [ClearanceController::class, 'index'])->name('clearance.index');
+    Route::post('/clearance', [ClearanceController::class, 'store'])->name('clearance.store');
+    Route::patch('/clearance/{clearance}/status', [ClearanceController::class, 'updateStatus'])->name('clearance.status');
+
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 });
 
 require __DIR__.'/settings.php';
