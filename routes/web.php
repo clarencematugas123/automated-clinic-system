@@ -8,6 +8,7 @@ use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\LabResultController;
 use App\Http\Controllers\ClearanceController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\InventoryController;
 
 Route::get('/', function () {
     return inertia('welcome');
@@ -21,6 +22,7 @@ Route::middleware('auth')->group(function () {
             'consultationCount' => \App\Models\Consultation::whereDate('created_at', today())->count(),
             'labPendingCount' => \App\Models\LabResult::where('status', 'pending')->count(),
             'clearancePendingCount' => \App\Models\Clearance::where('status', 'pending')->count(),
+            'inventoryLowCount' => \App\Models\InventoryItem::whereColumn('quantity', '<=', 'reorder_level')->count(),
         ]);
     })->name('dashboard');
 
@@ -50,6 +52,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/clearance/{clearance}/status', [ClearanceController::class, 'updateStatus'])->name('clearance.status');
 
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+
+    Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
+    Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store');
+    Route::patch('/inventory/{inventoryItem}/stock', [InventoryController::class, 'updateStock'])->name('inventory.stock');
+
+    Route::inertia('/security', 'security/index')->name('security.index');
 });
 
 require __DIR__.'/settings.php';

@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { dashboard } from '@/routes';
 
-type DashboardProps = { studentCount?: number; queueCount?: number; consultationCount?: number; labPendingCount?: number; clearancePendingCount?: number };
+type DashboardProps = { studentCount?: number; queueCount?: number; consultationCount?: number; labPendingCount?: number; clearancePendingCount?: number; inventoryLowCount?: number };
 
 const navItems = [
     { label: 'Student Records', icon: GraduationCap, href: '/students', active: true },
@@ -24,8 +24,8 @@ const navItems = [
     { label: 'Lab Results', icon: FlaskConical, href: '/lab-results' },
     { label: 'Clearance', icon: ClipboardList, href: '/clearance' },
     { label: 'Reports', icon: LayoutDashboard, href: '/reports' },
-    { label: 'Inventory', icon: Package, href: '#' },
-    { label: 'Security', icon: LockKeyhole, href: '#' },
+    { label: 'Inventory', icon: Package, href: '/inventory' },
+    { label: 'Security', icon: LockKeyhole, href: '/security' },
 ];
 
 const activities = [
@@ -35,7 +35,7 @@ const activities = [
     { label: 'Laboratory', status: 'Completed', date: 'September 4, 2026', tone: 'success' },
 ];
 
-export default function Dashboard({ studentCount = 0, queueCount = 0, consultationCount = 0, labPendingCount = 0, clearancePendingCount = 0 }: DashboardProps) {
+export default function Dashboard({ studentCount = 0, queueCount = 0, consultationCount = 0, labPendingCount = 0, clearancePendingCount = 0, inventoryLowCount = 0 }: DashboardProps) {
     const stats = [
         { label: 'Students', value: studentCount, detail: 'Records', icon: GraduationCap },
         { label: 'Queue', value: queueCount, detail: 'Waiting', icon: Activity },
